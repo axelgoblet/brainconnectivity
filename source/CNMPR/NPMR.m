@@ -8,7 +8,7 @@ function [ypred] = NPMR(y, X, i, tolerance)
 % extract index
 Xi = X(:,i);
 yWithouti = y([1:(i-1),(i+1):length(y)]);
-XWithouti = X(:,[1:(i-1),(i+1):length(X)]);
+XWithouti = X(:,[1:(i-1),(i+1):length(y)]);
 
 % compute weights
 differences = (XWithouti-repmat(Xi,1,length(X)-1));
