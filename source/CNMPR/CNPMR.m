@@ -1,4 +1,4 @@
-function [causality, sensitivity] = CNPMR(y, Xi, Z, delay, embeddingDimension, yTolerance, XiTolerance, ZTolerance, includeSensitivity)
+function [causality, xR2, sensitivity] = CNPMR(y, Xi, Z, delay, embeddingDimension, yTolerance, XiTolerance, ZTolerance, includeSensitivity)
 %This function computes the (conditional) Granger causality from Xi to Y/Z,
 %where Z are all predictors in X, except Xi
 %   y is the variable to predict
@@ -62,6 +62,9 @@ varWithXi = var(yTarget-ypredWithXi);
 
 % compute causality
 causality = log(varWithoutXi/varWithXi);
+
+% compute xR2
+xR2 = 1 - varWithoutXi / var(yTarget);
 
 % compute sensitivity
 if includeSensitivity

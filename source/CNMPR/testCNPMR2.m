@@ -1,4 +1,4 @@
-% create nonlinear AR model
+% create multivariate AR model
 x1next = @(x1previous1,x1previous2) 0.95*sqrt(2)*x1previous1 -0.9025*x1previous2+normrnd(0,1);
 x2next = @(x1previous) -0.5*x1previous + normrnd(0,1);
 x3next = @(x3previous,x2previous) 0.5*x3previous -0.5*x2previous+normrnd(0,1);
