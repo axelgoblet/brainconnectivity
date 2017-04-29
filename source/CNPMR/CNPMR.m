@@ -1,4 +1,4 @@
-function [causality, xR2, sensitivity] = CNPMR(y, Xi, Z, delay, embeddingDimension, yTolerance, XiTolerance, ZTolerance, includeSensitivity)
+function [causality, xR2, sensitivity] = CNPMR(y, Xi, Z, delay, embeddingDimension, yTolerance, XiTolerance, ZTolerance, includeSensitivity, significanceLevel)
 %This function computes the (conditional) Granger causality from Xi to Y/Z,
 %where Z are all predictors in X, except Xi
 %   y is the variable to predict
@@ -50,11 +50,12 @@ else
 end
 
 % predict y with and without Xi
+fitModel = @(y,X,tolerance,crossValidation)arrayfun(@(i)NPMR(y, X, i, tolerance, crossValidation), 1:length(yTarget));
 toleranceWithoutXi = [repmat(yTolerance,embeddingDimension,1);repmat(ZTolerance,embeddingDimension,1)];
-ypredWithoutXi = arrayfun(@(i)NPMR(yTarget, [yPredictors;ZPredictors], i, toleranceWithoutXi, true), 1:length(yTarget));
+ypredWithoutXi = fitModel(yTarget, [yPredictors;ZPredictors], toleranceWithoutXi, true);
 toleranceWithXi = [toleranceWithoutXi;repmat(XiTolerance,embeddingDimension,1)];
 predictorsWithXi = [yPredictors;ZPredictors;XiPredictors];
-ypredWithXi = arrayfun(@(i)NPMR(yTarget, predictorsWithXi, i, toleranceWithXi, true), 1:length(yTarget));
+ypredWithXi = fitModel(yTarget, predictorsWithXi, toleranceWithXi, true);
 
 % compute error variances
 varWithoutXi = var(yTarget-ypredWithoutXi);
