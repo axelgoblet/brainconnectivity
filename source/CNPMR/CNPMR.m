@@ -1,4 +1,4 @@
-function [causality, xR2, sensitivity] = CNPMR(y, Xi, Z, delay, embeddingDimension, yTolerance, XiTolerance, ZTolerance, includeSensitivity, significanceLevel)
+function [causality, xR2, isSignificant, sensitivity] = CNPMR(y, Xi, Z, delay, embeddingDimension, yTolerance, XiTolerance, ZTolerance, includeSensitivity, significanceLevel)
 %This function computes the (conditional) Granger causality from Xi to Y/Z,
 %where Z are all predictors in X, except Xi
 %   y is the variable to predict
@@ -9,7 +9,16 @@ function [causality, xR2, sensitivity] = CNPMR(y, Xi, Z, delay, embeddingDimensi
 %   yTolerance is the variance of the Gaussian kernel for variable y
 %   XiTolerance is the variance of the Gaussian kernel for variable Xi
 %   ZTolerance are the variances of the Gaussian kernel for variable Z
-%   includeSensitivity defines whether sensitivity should be computed
+%   includeSensitivity defines whether sensitivity should be computed (default true)
+%   significanceLevel is the level of significance desired (default 0.05)
+
+if nargin < 10
+    significanceLevel = 0.05;
+    
+    if nargin < 9
+        includeSensitivity = true;
+    end
+end
 
 % find best parameters for time-delay embedding
 if isempty(delay)
@@ -38,40 +47,20 @@ if isempty(ZTolerance) && not(isempty(Z))
 
 end
 
-% create time-delay embedding
-indicesToPredict = (embeddingDimension * delay + 1):length(y);
-yTarget = y(indicesToPredict);
-yPredictors = cell2mat(arrayfun(@(i)y(indicesToPredict-i*delay)', 1:embeddingDimension, 'UniformOutput', false))';
-XiPredictors = cell2mat(arrayfun(@(i)Xi(indicesToPredict-i*delay)', 1:embeddingDimension, 'UniformOutput', false))';
-if isempty(Z)
-    ZPredictors = Z;
-else
-    ZPredictors = cell2mat(arrayfun(@(i)Z(:,indicesToPredict-i*delay)', 1:embeddingDimension, 'UniformOutput', false))';
+% generate time shifts
+numberOfSurrogates = 1/significanceLevel - 1;
+shifts = round(unifrnd(0.33,0.66,1,numberOfSurrogates)*length(Xi));
+
+% estimate causalities with shifted predictors
+surrogateEstimates = arrayfun(@(i)estimateCausality(y, Xi([i:length(Xi),1:(i-1)]), Z, delay, embeddingDimension, yTolerance, XiTolerance, ZTolerance, false), shifts);
+
+% find threshold
+significanceThreshold = max(surrogateEstimates);
+
+% compute unshifted causality
+[causality, xR2, sensitivity] = estimateCausality(y, Xi, Z, delay, embeddingDimension, yTolerance, XiTolerance, ZTolerance, includeSensitivity);
+
+isSignificant = causality > significanceThreshold;
+
 end
 
-% predict y with and without Xi
-fitModel = @(y,X,tolerance,crossValidation)arrayfun(@(i)NPMR(y, X, i, tolerance, crossValidation), 1:length(yTarget));
-toleranceWithoutXi = [repmat(yTolerance,embeddingDimension,1);repmat(ZTolerance,embeddingDimension,1)];
-ypredWithoutXi = fitModel(yTarget, [yPredictors;ZPredictors], toleranceWithoutXi, true);
-toleranceWithXi = [toleranceWithoutXi;repmat(XiTolerance,embeddingDimension,1)];
-predictorsWithXi = [yPredictors;ZPredictors;XiPredictors];
-ypredWithXi = fitModel(yTarget, predictorsWithXi, toleranceWithXi, true);
-
-% compute error variances
-varWithoutXi = var(yTarget-ypredWithoutXi);
-varWithXi = var(yTarget-ypredWithXi);
-
-% compute causality
-causality = log(varWithoutXi/varWithXi);
-
-% compute xR2
-xR2 = 1 - varWithoutXi / var(yTarget);
-
-% compute sensitivity
-if includeSensitivity
-    sensitivity = arrayfun(@(i)computeSensitivity(yTarget,predictorsWithXi,i+(1+length(ZTolerance))*embeddingDimension,toleranceWithXi),1:embeddingDimension);
-else
-    sensitivity = [];
-end
-    
-end
