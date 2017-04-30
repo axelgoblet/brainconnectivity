@@ -29,7 +29,7 @@ for CONTRAST=1:2:20%%% we change the lumninance contrast of the stimulus
                     ELECTRODE = 16;
                 end
                 
-                ROWINFO = [CONTRAST,ATTENTION_CND,AREA,ELECTRODE,TRIAL]
+                ROWINFO = [CONTRAST,ATTENTION_CND,AREA,ELECTRODE,TRIAL];
                 lfp = squeeze(timelock.trial(TRIAL,ELECTRODEAREA,:))';
                                 
                 data(i,1:length(lfp)+length(ROWINFO))=[ROWINFO,lfp];
