@@ -5,9 +5,9 @@ x2next = @(x1previous,x2previous) 0.6*x2previous + normrnd(0,1);
 % 50 realizations
 x2tox1=zeros(1,6);
 x1tox2=zeros(1,3);
-realizations = 1;
+realizations = 50;
 for realization=1:realizations
-    
+    realization
     % generate 1000 samples
     x1=zeros(1,1001);
     x2=zeros(1,1001);

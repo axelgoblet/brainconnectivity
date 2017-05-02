@@ -10,9 +10,9 @@ x2tox1=zeros(1,3);
 x2tox3=zeros(1,6);
 x3tox1=zeros(1,3);
 x3tox2=zeros(1,3);
-realizations=1;
+realizations=50;
 for realization=1:realizations
-    
+    realization
     % generate 1000 samples
     x1=zeros(1,1002);
     x2=zeros(1,1002);

@@ -23,28 +23,23 @@ end
 % find best parameters for time-delay embedding
 if isempty(delay)
     
-    %find best delay
-    
+    delay = 1;
 end
 if isempty(embeddingDimension)
     
-    %find best embeddingDimension
-
+    embeddingDimension = 3;
 end
 if isempty(yTolerance)
     
-    %find best yTolerance
-
+    yTolerance = 1;
 end
 if isempty(XiTolerance)
     
-    %find best XiTolerance
-
+    XiTolerance = 1;
 end
 if isempty(ZTolerance) && not(isempty(Z))
     
-    %find best ZTolerance
-
+    ZTolerance = ones(1,length(Z(:,1),1));
 end
 
 % generate time shifts

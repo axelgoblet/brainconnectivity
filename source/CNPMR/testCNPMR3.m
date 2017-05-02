@@ -6,14 +6,14 @@ x3next = @(x1previous, x2previous, x3previous) 3.4*x3previous*(1-x3previous^2)*e
 
 % 50 realizations
 x1tox2=zeros(1,6);
-x1tox3=zeros(1,3);
+x1tox3=zeros(1,6);
 x2tox1=zeros(1,3);
 x2tox3=zeros(1,6);
 x3tox1=zeros(1,3);
 x3tox2=zeros(1,3);
-realizations=1;
+realizations=50;
 for realization=1:realizations
-    
+    realization
     % generate 1000 samples
     x1=zeros(1,1001);
     x2=zeros(1,1001);
@@ -30,7 +30,7 @@ for realization=1:realizations
     % compute causality and average
     [causality,xR2,isSignificant,sensitivity] = CNPMR(x2,x1,x3,1,3,1,1,1,true);
     x1tox2=x1tox2 + 1/realizations * [causality,xR2,isSignificant,sensitivity];
-    [causality,xR2,isSignificant,sensitivity] = CNPMR(x3,x1,x2,1,3,1,1,1,false);
+    [causality,xR2,isSignificant,sensitivity] = CNPMR(x3,x1,x2,1,3,1,1,1,true);
     x1tox3=x1tox3 + 1/realizations * [causality,xR2,isSignificant,sensitivity];
     [causality,xR2,isSignificant,sensitivity] = CNPMR(x1,x2,x3,1,3,1,1,1,false);
     x2tox1=x2tox1 + 1/realizations * [causality,xR2,isSignificant,sensitivity];
@@ -43,12 +43,9 @@ for realization=1:realizations
 end
 
 % output
-x1tox2 %the paper states [0.510,?,1,0.194,0.080,0.095]
-x1tox3 %the paper states [-0.125,?,?]
-x2tox1 %the paper states [-0.003,?,?]
-x2tox3 %the paper states [0.064,?,1,0.117,0.079,0.082]
-x3tox1 %the paper states [-0.055,?,?]
-x3tox2 %the paper states [-0.018,?,?]
-
-% compute causalities for created samples (between x1 and x2)
-% [freq1, freq2] = bandPassCNPMR(x1,x2,50,[1 20], 100, 0.5, 5);
+x1tox2 %the paper states [0.063,?,1,0.064,0.030,0.026]
+x1tox3 %the paper states [0.049,?,1,0.068,0.029,0.025]
+x2tox1 %the paper states [0,?,?]
+x2tox3 %the paper states [0.085,?,1,0.103,0.035,0.029]
+x3tox1 %the paper states [0.002,?,1]
+x3tox2 %the paper states [0,?,?]
