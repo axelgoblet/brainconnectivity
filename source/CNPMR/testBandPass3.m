@@ -17,4 +17,6 @@ x2=x2(2:1001);
 x3=x3(2:1001);
 
 % compute causalities for created samples (between x1 and x2)
-[freq1, freq2] = bandPassCNPMR(x1,x2,50,[1 40], 100, 0.5, 5);
+x1tox2cnpmr = CNPMR(x2,x1,[],1,3,1,1,[],false,0.05,[10,15],100)
+x2tox1cnpmr = CNPMR(x1,x2,[],1,3,1,1,[],false,0.05,[10,15],100)
+[~,~,x1tox2geweke,x2tox1geweke]=pwcausal([x1;x2],1,length(x1),15,100,12.5)

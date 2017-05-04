@@ -1,4 +1,4 @@
-function [causality, xR2, isSignificant, sensitivity] = CNPMR(y, Xi, Z, delay, embeddingDimension, yTolerance, XiTolerance, ZTolerance, includeSensitivity, significanceLevel)
+function [causality, xR2, isSignificant, sensitivity] = CNPMR(y, Xi, Z, delay, embeddingDimension, yTolerance, XiTolerance, ZTolerance, includeSensitivity, significanceLevel, frequencyBand, samplingFrequency)
 %This function computes the (conditional) Granger causality from Xi to Y/Z,
 %where Z are all predictors in X, except Xi
 %   y is the variable to predict
@@ -11,6 +11,16 @@ function [causality, xR2, isSignificant, sensitivity] = CNPMR(y, Xi, Z, delay, e
 %   ZTolerance are the variances of the Gaussian kernel for variable Z
 %   includeSensitivity defines whether sensitivity should be computed (default true)
 %   significanceLevel is the level of significance desired (default 0.05)
+%   frequencyBand is the frequency band at which the signal is filtered before estimating the causality
+%   samplingFrequency is the sampling frequency of the data
+
+% band pass filter signal
+if nargin == 12
+   b = fir1(50, frequencyBand*2/samplingFrequency);
+   y = filter(b,1,y);
+   Xi = filter(b,1,Xi);
+   Z = filter(b,1,Z);
+end
 
 if nargin < 10
     significanceLevel = 0.05;
