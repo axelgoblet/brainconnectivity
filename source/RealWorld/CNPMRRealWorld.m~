@@ -27,7 +27,7 @@ lag=5;
             Attention = 1;
             FromArea = 1;
             ToArea = 4;
-            Electrode = electrodes(4);
+            Electrode = electrodes(1);
             Trial = i;
 
             x = data(data(:,1) == Contrast & data(:,2) == Attention & data(:,3) == ToArea & data(:,4) == Electrode & data(:,5) == Trial, 6:end);
@@ -52,17 +52,23 @@ lag=5;
             
             %
             if w == 1
-                disp(['Calculating Overall Causality and Significance for Trial ', num2str(i)]);
-                [causality1,xR2_1,isSignificant1,sensitivity1] = CNPMR(X(:,1)',X(:,2)',[],1,lag,1,1,[],false);
-                causalitiesInTrial(1,i) = causality1;
-                significanceInTrial(1,i) = isSignificant1;
+                disp(['Calculating Overall Causality for Trial ', num2str(i)]);
+                [CC, V, Vj, H_K, H_Kj, H_Kv] = gcausality(X, 2, 1, lag);
+                causalitiesInTrial(1,i) = CC;
+                
+                disp(['Calculating Overall Significance for Trial ', num2str(i)]);
+                [significance, CCs, H_Ks] = caussignif(X, 2, 1, numSur, surMinLag, CC, H_Kj, lag);
+                significanceInTrial(1,i) = significance;
                 
             end
             
             disp(['Calculating Overall Causality for Trial ', num2str(i), ' and window ', num2str(w)]);
-           [causality2,xR2_1,isSignificant2,sensitivity1] = CNPMR(windowX(:,1)',windowX(:,2)',[],1,lag,1,1,[],false);
-            causalitiesInWindow(1,i) = causality2;
-            significanceInWindow(1,i) = isSignificant2;
+            [CC, V, Vj, H_K, H_Kj, H_Kv] = gcausality(windowX, 2, 1, lag);
+            causalitiesInWindow(1,i) = CC;
+            
+            disp(['Calculating Overall Significance for Trial ', num2str(i), ' and window ', num2str(w)]);
+            [significance, CCs, H_Ks] = caussignif(windowX, 2, 1, numSur, surMinLag, CC, H_Kj, lag);
+            significanceInWindow(1,i) = significance;
         end
         causalitiesPerWindow(1,w) = mean(causalitiesInWindow);
         significancePerWindow(1,w) = mean(significanceInWindow);
