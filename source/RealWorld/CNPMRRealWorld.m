@@ -27,7 +27,7 @@ lag=5;
             Attention = 1;
             FromArea = 1;
             ToArea = 4;
-            Electrode = electrodes(1);
+            Electrode = electrodes(4);
             Trial = i;
 
             x = data(data(:,1) == Contrast & data(:,2) == Attention & data(:,3) == ToArea & data(:,4) == Electrode & data(:,5) == Trial, 6:end);
