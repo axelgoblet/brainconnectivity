@@ -1,8 +1,8 @@
-sigma = 0.003;
+sigma = 0.0000003;
 
 % create multivariate AR model
 ynext = @(yprevious1,yprevious2,xprevious1,xprevious2)0.5*yprevious1-0.3*yprevious2+0.1*xprevious2+0.4*xprevious1*xprevious2+normrnd(0,sigma);
-xnext = @(yprevious2,xprevious1,xprevious2)0.3*xprevious1-xprevious2-0.1*yprevious2+normrnd(0,sigma);
+xnext = @(yprevious2,xprevious1,xprevious2)0.3*xprevious1-xprevious2-0.5*yprevious2+normrnd(0,sigma);
 
 % generate 1000 samples
 signalLength = 1000;
@@ -51,6 +51,13 @@ plot(frequencies,causalities)
 xlabel('f')
 ylabel('causality')
 title('causality x-->y over frequency')
+
+causalities = arrayfun(@(frequency)CNPMR(x,y,[],1,3,1,1,[],false,0.5,[frequency-bandwidth/2,frequency+bandwidth/2],20), frequencies);
+figure(3)
+plot(frequencies,causalities)
+xlabel('f')
+ylabel('causality')
+title('causality y-->x over frequency')
 
 [c,~,s]=CNPMR(y,x,[],1,3,1,1,[],false,0.05,[4.45,4.55],20)
 [c,~,s]=CNPMR(y,x,[],1,3,1,1,[],false,0.05)
