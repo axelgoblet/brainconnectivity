@@ -1,0 +1,95 @@
+load('data\fullDataSet.mat');
+
+
+electrodes = [2 6 10 14];
+
+numWindows = 25;
+
+
+numSur = 20;
+surMinLag = 20;
+lag=5;
+
+%for m = 1 : size(electrodes)
+    causalitiesInTrial = zeros(1,60);
+    significanceInTrial = zeros(1,60);
+    causalitiesPerWindow = zeros(1,numWindows);
+    significancePerWindow = zeros(1,numWindows);
+    for w = 1 : numWindows
+        causalitiesInWindow = zeros(1,60);
+        significanceInWindow = zeros(1,60);
+        
+        for i = 1 : 60
+            
+            clearvars B
+
+            Contrast = 1;
+            Attention = 1;
+            FromArea = 1;
+            ToArea = 4;
+            Electrode = electrodes(1);
+            Trial = i;
+
+            x = data(data(:,1) == Contrast & data(:,2) == Attention & data(:,3) == ToArea & data(:,4) == Electrode & data(:,5) == Trial, 6:end);
+            y = data(data(:,1) == Contrast & data(:,2) == Attention & data(:,3) == FromArea & data(:,4) == Electrode & data(:,5) == Trial, 6:end);  
+
+            X = [x',y'];
+            for j = 1 : size(X,2)
+                B{j} = X(~isnan(X(:,j)), j);
+            end
+
+            X = cell2mat(B(1,:));
+            
+            %select measurements in current trial with current window
+            windowSize = floor(size(X,1)/numWindows);
+            intervalStart = windowSize*(w-1)+1;
+            intervalEnd = windowSize*w;
+            windowX = X(intervalStart:intervalEnd,:);
+            
+            
+            windowX = quantize(windowX,20);
+            X = quantize(X, 20);
+            
+            %
+            if w == 1
+                disp(['Calculating Overall Causality for Trial ', num2str(i)]);
+                [CC, V, Vj, H_K, H_Kj, H_Kv] = gcausality(X, 2, 1, lag);
+                causalitiesInTrial(1,i) = CC;
+                
+                disp(['Calculating Overall Significance for Trial ', num2str(i)]);
+                [significance, CCs, H_Ks] = caussignif(X, 2, 1, numSur, surMinLag, CC, H_Kj, lag);
+                significanceInTrial(1,i) = significance;
+                
+            end
+            
+            disp(['Calculating Overall Causality for Trial ', num2str(i), ' and window ', num2str(w)]);
+            [CC, V, Vj, H_K, H_Kj, H_Kv] = gcausality(windowX, 2, 1, lag);
+            causalitiesInWindow(1,i) = CC;
+            
+            disp(['Calculating Overall Significance for Trial ', num2str(i), ' and window ', num2str(w)]);
+            [significance, CCs, H_Ks] = caussignif(windowX, 2, 1, numSur, surMinLag, CC, H_Kj, lag);
+            significanceInWindow(1,i) = significance;
+        end
+        causalitiesPerWindow(1,w) = mean(causalitiesInWindow);
+        significancePerWindow(1,w) = mean(significanceInWindow);
+    end
+    
+    figure(1);
+    subplot(1,2,1)
+    plot(causalitiesPerWindow);
+    hold on
+    plot(ones(1,numWindows)*mean(causalitiesInTrial));
+    hold off
+    
+    xlabel('window')
+    ylabel('causality')
+    
+    subplot(1,2,2)
+    plot(significancePerWindow)
+    hold on
+    plot(ones(1,numWindows)*mean(significanceInTrial));
+    
+    hold off
+    xlabel('window')
+    ylabel('significance')
+%end
