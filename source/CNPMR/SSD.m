@@ -190,7 +190,7 @@ while (remen > th) && (k1 < maxNumberofComponents)
     end
 end
 
-% Notify the user that the there is too much noise in the signal to
+% Notify the user that the there is to much noise in the signal to
 % accurately decompose it.
 if testcond
     fprintf('warning: noise level affecting decomposition, total energy described by SSD components is: %3.1f\n %',(1-sum((sum(RR1(1:end,:),1)-orig).^2)/(sum(orig.^2)))*100);
