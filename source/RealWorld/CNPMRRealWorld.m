@@ -10,7 +10,7 @@ numSur = 20;
 surMinLag = 20;
 lag=5;
 
-%for m = 1 : size(electrodes)
+for m = 1 : size(electrodes,2)
     causalitiesInTrial = zeros(1,60);
     significanceInTrial = zeros(1,60);
     causalitiesPerWindow = zeros(1,numWindows);
@@ -27,7 +27,7 @@ lag=5;
             Attention = 1;
             FromArea = 1;
             ToArea = 4;
-            Electrode = electrodes(4);
+            Electrode = electrodes(m);
             Trial = i;
 
             x = data(data(:,1) == Contrast & data(:,2) == Attention & data(:,3) == ToArea & data(:,4) == Electrode & data(:,5) == Trial, 6:end);
@@ -67,8 +67,8 @@ lag=5;
         causalitiesPerWindow(1,w) = mean(causalitiesInWindow);
         significancePerWindow(1,w) = mean(significanceInWindow);
     end
-    
-    figure(1);
+    close all;
+    figure;
     subplot(1,2,1)
     plot(causalitiesPerWindow);
     hold on
@@ -86,4 +86,7 @@ lag=5;
     hold off
     xlabel('window')
     ylabel('significance')
-%end
+    
+    saveas(gcf,['imagesCNPMR\PNG\V',num2str(FromArea),' To ','V',num2str(ToArea),' Electrode',num2str(electrodes(m)),' Contrast',num2str(Contrast),' Attention',num2str(Attention),'.png'])
+    saveas(gcf,['imagesCNPMR\Figures\V',num2str(FromArea),' To ','V',num2str(ToArea),' Electrode',num2str(electrodes(m)),' Contrast',num2str(Contrast),' Attention',num2str(Attention),'.fig'])
+end

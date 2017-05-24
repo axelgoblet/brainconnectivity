@@ -1,6 +1,6 @@
 close all, clear all
 
-DRIVE='../data'; %% set where the data is stored
+DRIVE='data'; %% set where the data is stored
 
 data=NaN(39984,2577);
 
@@ -45,6 +45,6 @@ headers = [headers{:}];
 
 t = -0.5+0.001*(0:2571);
 
-save('../data/fullDataSet.mat', 'data', 'headers', 't')
+save('data/fullDataSet.mat', 'data', 'headers', 't')
 
 clear
