@@ -7,7 +7,7 @@ load('data\fullDataSet.mat');
 
 % electrodes to be evaluated. the current code evaluates electrode x in V1
 % to electrode x in V4
-electrodes = [2 6 10 14];
+electrodes = 16;
 
 % number of windows that should be evaluated
 numWindows = 25;
@@ -19,6 +19,9 @@ surrogateMinLag = 20;
 % ?maximum lag of model that we want to evaluate?
 lag=5;
 
+% Threshold for significance analysis
+SigThreshold = 0.05;
+
 % The average causality taken over the entire time series for each electrode
 causalitiesAverageInTrialPerElectrode = zeros(size(electrodes,2), numWindows);
 % The average significance taken over the entire time series for each electrode
@@ -27,6 +30,8 @@ significanceAverageInTrialPerElectrode = zeros(size(electrodes,2), numWindows);
 causalitiesPerWindowPerElectrode = zeros(size(electrodes,2), numWindows);
 %the average significance for each window for each electrode
 significancePerWindowPerElectrode = zeros(size(electrodes,2), numWindows);
+
+
 
 for m = 1 : size(electrodes,2)
     causalitiesInTrial = zeros(1,60);
@@ -43,8 +48,8 @@ for m = 1 : size(electrodes,2)
 
             Contrast = 1;
             Attention = 1;
-            FromArea = 1;
-            ToArea = 4;
+            FromArea = 4;
+            ToArea = 1;
             FromElectrode = electrodes(m);
             ToElectrode = electrodes(m);
             Trial = i;
@@ -108,7 +113,7 @@ for m = 1 : size(electrodes,2)
                 %compute significance for current window and trial
                 disp(['Calculating Overall Significance for Trial ', num2str(i), ' and window ', num2str(w)]);
                 [significance, CCs, H_Ks] = caussignif(windowX, 2, 1, numSurrogates, surrogateMinLag, CC, H_Kj, lag);
-                significanceInWindow(1,i) = significance;
+                significanceInWindow(1,i) = (significance < SigThreshold);
             end
         end
         causalitiesPerWindow(1,w) = mean(causalitiesInWindow);
@@ -122,10 +127,10 @@ end
 
 %% Create csv with results (so we don't need to run this stuff again)
 
-%csvwrite('FaesTotalCausality', causalitiesAverageInTrialPerElectrode);
-%csvwrite('FaesTotalSignificance', significanceAverageInTrialPerElectrode);
-%csvwrite('FaesWindowedCausality', causalitiesPerWindowPerElectrode);
-%csvwrite('FaesWindowedSignificance', causalitiesAverageInTrialPerElectrode);
+csvwrite('FaesTotalCausality.csv', causalitiesAverageInTrialPerElectrode);
+csvwrite('FaesTotalSignificance.csv', significanceAverageInTrialPerElectrode);
+csvwrite('FaesWindowedCausality.csv', causalitiesPerWindowPerElectrode);
+csvwrite('FaesWindowedSignificance.csv', causalitiesAverageInTrialPerElectrode);
 
 %% plot for first electrode
 figure(1);
@@ -137,7 +142,7 @@ hold off
 title('Causality Electrode 2')
 xlabel('window')
 ylabel('causality')
-ylim([0 inf])
+ylim([0 0.09])
 legend('average causality over 60 trials per window','average total causality','Location','southeast')
 
 subplot(1,2,2)
@@ -148,7 +153,7 @@ hold off
 title('Significance Electrode 2')
 xlabel('window')
 ylabel('significance')
-ylim([0 inf])
+ylim([0 1])
 legend('average significance over 60 trials per window','average total significance','Location','southeast')
 
 %% plot for second electrode
@@ -161,7 +166,7 @@ hold off
 title('Causality Electrode 6')
 xlabel('window')
 ylabel('causality')
-ylim([0 inf])
+ylim([0 0.09])
 legend('average causality over 60 trials per window','average total causality','Location','southeast')
 
 
@@ -173,7 +178,7 @@ hold off
 title('Significance Electrode 6')
 xlabel('window')
 ylabel('significance')
-ylim([0 inf])
+ylim([0 1])
 legend('average significance over 60 trials per window','average total significance','Location','southeast')
 
 
@@ -187,7 +192,7 @@ hold off
 title('Causality Electrode 10')
 xlabel('window')
 ylabel('causality')
-ylim([0 inf])
+ylim([0 0.09])
 legend('average causality over 60 trials per window','average total causality','Location','southeast')
 
 
@@ -199,7 +204,7 @@ hold off
 title('Significance Electrode 10')
 xlabel('window')
 ylabel('significance')
-ylim([0 inf])
+ylim([0 1])
 legend('average significance over 60 trials per window','average total significance','Location','southeast')
 
 
@@ -213,7 +218,7 @@ hold off
 title('Causality Electrode 14')
 xlabel('window')
 ylabel('causality')
-ylim([0 inf])
+ylim([0 0.09])
 legend('average causality over 60 trials per window','average total causality','Location','southeast')
 
 
@@ -225,5 +230,5 @@ hold off
 title('Significance Electrode 14')
 xlabel('window')
 ylabel('significance')
-ylim([0 inf])
+ylim([0 1])
 legend('average significance over 60 trials per window','average total significance','Location','southeast')
