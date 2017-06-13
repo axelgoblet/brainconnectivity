@@ -25,7 +25,7 @@ SigThreshold = 0.05;
 % Parameters for realworld data selection
 Contrast = 1;
 Attention = 1;
-FromArea = 2;
+FromArea = 4;
 ToArea = 1;
 
 toData = data(data(:,1) == Contrast & data(:,2) == Attention & data(:,3) == ToArea, :);
@@ -48,7 +48,7 @@ for e = 1 : electrodes
     averageFromData(e,:) = [Contrast, Attention, ToArea, e, mean(fromData(fromData(:,4) == e ,6:end))];
 end
 
-
+save('averageV4.mat', 'averageFromData');
 
 % results matrix
 % index 1: which From electrode
