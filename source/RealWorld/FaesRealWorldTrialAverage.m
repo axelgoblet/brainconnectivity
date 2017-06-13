@@ -25,7 +25,7 @@ SigThreshold = 0.05;
 % Parameters for realworld data selection
 Contrast = 1;
 Attention = 1;
-FromArea = 4;
+FromArea = 2;
 ToArea = 1;
 
 toData = data(data(:,1) == Contrast & data(:,2) == Attention & data(:,3) == ToArea, :);
@@ -146,5 +146,5 @@ for firstE = 1 : minFromIndex
     end
 end
 
-save('resultsV1toV4.mat', 'resultsV1toV4');
-save('resultsV4toV1.mat', 'resultsV4toV1');
+save('resultsV1toV2.mat', 'resultsV1toV4');
+save('resultsV2toV1.mat', 'resultsV4toV1');
