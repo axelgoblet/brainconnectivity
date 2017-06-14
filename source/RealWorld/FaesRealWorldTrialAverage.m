@@ -48,7 +48,7 @@ for e = 1 : electrodes
     averageFromData(e,:) = [Contrast, Attention, ToArea, e, mean(fromData(fromData(:,4) == e ,6:end))];
 end
 
-
+save('averageV4.mat', 'averageFromData');
 
 % results matrix
 % index 1: which From electrode
@@ -146,5 +146,5 @@ for firstE = 1 : minFromIndex
     end
 end
 
-save('resultsV1toV4.mat', 'resultsV1toV4');
-save('resultsV4toV1.mat', 'resultsV4toV1');
+save('resultsV1toV2.mat', 'resultsV1toV4');
+save('resultsV2toV1.mat', 'resultsV4toV1');
