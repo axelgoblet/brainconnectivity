@@ -122,8 +122,8 @@ for p = 1:size(FromArea,2)
     end
 end
 
-save(['resultsV',num2str(FromArea(p)),'toV',num2str(ToArea(q)),'.mat'], 'results1');
-save(['resultsV',num2str(ToArea(q)),'toV',num2str(FromArea(p)),'.mat'], 'results2'); 
+save(['CNPMResultsV',num2str(FromArea(p)),'toV',num2str(ToArea(q)),'.mat'], 'results1');
+save(['CNPMRresultsV',num2str(ToArea(q)),'toV',num2str(FromArea(p)),'.mat'], 'results2'); 
     end
 end
 

@@ -25,11 +25,12 @@ SigThreshold = 0.05;
 % Parameters for realworld data selection
 Contrast = 1;
 Attention = 1;
-FromArea = 4;
-ToArea = 1;
-
-toData = data(data(:,1) == Contrast & data(:,2) == Attention & data(:,3) == ToArea, :);
-fromData = data(data(:,1) == Contrast & data(:,2) == Attention & data(:,3) == FromArea, :);
+FromArea = [1,2,4];
+ToArea = [1,2,4];
+for p = 1:size(FromArea,2)
+    for q = 1:size(ToArea,2) 
+toData = data(data(:,1) == Contrast & data(:,2) == Attention & data(:,3) == ToArea(q), :);
+fromData = data(data(:,1) == Contrast & data(:,2) == Attention & data(:,3) == FromArea(p), :);
 
 % remove NaN values
 [r, c] = find(isnan(toData) > 0);
@@ -44,11 +45,10 @@ averageToData = zeros(electrodes, size(toData, 2)-1);
 averageFromData = zeros(electrodes, size(fromData, 2)-1);
 
 for e = 1 : electrodes
-    averageToData(e,:) = [Contrast, Attention, ToArea, e, mean(toData(toData(:,4) == e ,6:end))];
-    averageFromData(e,:) = [Contrast, Attention, ToArea, e, mean(fromData(fromData(:,4) == e ,6:end))];
+    averageToData(e,:) = [Contrast, Attention, ToArea(q), e, mean(toData(toData(:,4) == e ,6:end))];
+    averageFromData(e,:) = [Contrast, Attention, FromArea(p), e, mean(fromData(fromData(:,4) == e ,6:end))];
 end
 
-save('averageV4.mat', 'averageFromData');
 
 % results matrix
 % index 1: which From electrode
@@ -104,9 +104,9 @@ for firstE = 1 : minFromIndex
             if false
             else
                 %compute causality for current window FromArea --> ToArea
-                disp(['Calculating Overall Causality from V', num2str(FromArea), ' to V', num2str(ToArea),  ' for window ', num2str(w), ' between electrode ', num2str(firstE), ' in V', num2str(FromArea) ' and ', num2str(secondE), ' in V', num2str(ToArea)]);
+                disp(['Calculating Overall Causality from V', num2str(FromArea(p)), ' to V', num2str(ToArea(q)),  ' for window ', num2str(w), ' between electrode ', num2str(firstE), ' in V', num2str(FromArea(p)) ' and ', num2str(secondE), ' in V', num2str(ToArea(q))]);
                 [CC, V, Vj, H_K, H_Kj, H_Kv] = gcausality(windowX, 1, 2, lag);
-                resultsV4toV1(firstE,secondE,w,1) = CC;
+                results1(firstE,secondE,w,1) = CC;
 
                 % There were some problems regarding these trials
                 % "Error using randperm
@@ -114,9 +114,9 @@ for firstE = 1 : minFromIndex
                 if true
                 else
                     %compute significance for current window and trial
-                    disp(['Calculating Overall Significance for window ', num2str(w), ' between electrodes ', num2str(firstE), ' in V', num2str(FromArea) ' and ', num2str(secondE), ' in V', num2str(ToArea)]);
+                    disp(['Calculating Overall Significance for window ', num2str(w), ' between electrodes ', num2str(firstE), ' in V', num2str(FromArea(p)) ' and ', num2str(secondE), ' in V', num2str(ToArea(q))]);
                     [significance, CCs, H_Ks] = caussignif(windowX, 1, 2, numSurrogates, surrogateMinLag, CC, H_Kj, lag);
-                    resultsV4toV1(firstE,secondE,w,2) = (significance < SigThreshold);
+                    results1(firstE,secondE,w,2) = (significance < SigThreshold);
                 end
             end
             
@@ -127,9 +127,9 @@ for firstE = 1 : minFromIndex
             if false 
             else
                 %compute causality for current window  ToArea --> FromArea
-                disp(['Calculating Overall Causality from V', num2str(ToArea), ' to V', num2str(FromArea),  ' for window ', num2str(w), ' between electrode ', num2str(secondE), ' in V', num2str(ToArea) ' and ', num2str(firstE), ' in V', num2str(FromArea)]);
+                disp(['Calculating Overall Causality from V', num2str(ToArea(q)), ' to V', num2str(FromArea(p)),  ' for window ', num2str(w), ' between electrode ', num2str(secondE), ' in V', num2str(ToArea(q)) ' and ', num2str(firstE), ' in V', num2str(FromArea(p))]);
                 [CC, V, Vj, H_K, H_Kj, H_Kv] = gcausality(windowX, 2, 1, lag);
-                resultsV1toV4(secondE,firstE,w,1) = CC;
+                results2(secondE,firstE,w,1) = CC;
 
                 % There were some problems regarding these trials
                 % "Error using randperm
@@ -137,14 +137,16 @@ for firstE = 1 : minFromIndex
                 if true              
                 else
                     %compute significance for current window and trial
-                    disp(['Calculating Overall Significance for window ', num2str(w), ' between electrode ', num2str(secondE), ' in V', num2str(ToArea) ' and ', num2str(firstE), ' in V', num2str(FromArea)]);
+                    disp(['Calculating Overall Significance for window ', num2str(w), ' between electrode ', num2str(secondE), ' in V', num2str(ToArea(q)) ' and ', num2str(firstE), ' in V', num2str(FromArea(p))]);
                     [significance, CCs, H_Ks] = caussignif(windowX, 2, 1, numSurrogates, surrogateMinLag, CC, H_Kj, lag);
-                    resultsV1toV4(secondE,firstE,w,2) = (significance < SigThreshold);
+                    results2(secondE,firstE,w,2) = (significance < SigThreshold);
                 end
             end
         end
     end
 end
 
-save('resultsV1toV2.mat', 'resultsV1toV4');
-save('resultsV2toV1.mat', 'resultsV4toV1');
+save(['FAESresultsV',num2str(FromArea(p)),'toV',num2str(ToArea(q)),'.mat'], 'results1');
+save(['FAESresultsV',num2str(ToArea(q)),'toV',num2str(FromArea(p)),'.mat'], 'results2'); 
+    end
+end
