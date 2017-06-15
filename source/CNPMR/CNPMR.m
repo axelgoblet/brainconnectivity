@@ -52,20 +52,24 @@ if isempty(ZTolerance) && not(isempty(Z))
     ZTolerance = ones(1,length(Z(:,1),1));
 end
 
+% compute unshifted causality
+[causality, xR2, sensitivity] = estimateCausality(y, Xi, Z, delay, embeddingDimension, yTolerance, XiTolerance, ZTolerance, includeSensitivity);
+
 % generate time shifts
 numberOfSurrogates = 1/significanceLevel - 1;
 shifts = round(unifrnd(0.33,0.66,1,numberOfSurrogates)*length(Xi));
 
-% estimate causalities with shifted predictors
-surrogateEstimates = arrayfun(@(i)estimateCausality(y, Xi([i:length(Xi),1:(i-1)]), Z, delay, embeddingDimension, yTolerance, XiTolerance, ZTolerance, false), shifts);
+if significanceLevel == 1 
+    isSignificant = logical(1);
+else
+    % estimate causalities with shifted predictors
+    surrogateEstimates = arrayfun(@(i)estimateCausality(y, Xi([i:length(Xi),1:(i-1)]), Z, delay, embeddingDimension, yTolerance, XiTolerance, ZTolerance, false), shifts);
 
-% find threshold
-significanceThreshold = max(surrogateEstimates);
+    % find threshold
+    significanceThreshold = max(surrogateEstimates);
 
-% compute unshifted causality
-[causality, xR2, sensitivity] = estimateCausality(y, Xi, Z, delay, embeddingDimension, yTolerance, XiTolerance, ZTolerance, includeSensitivity);
-
-isSignificant = causality > significanceThreshold;
+    isSignificant = causality > significanceThreshold; 
+end
 
 end
 
