@@ -9,9 +9,10 @@ load('data\fullDataSet.mat');
 % to electrode x in V4
 electrodes = 16;
 
-% number of windows that should be evaluated
-numWindows = 25;
+% size of each window
+windowSize = 100;
 
+doSignificance = true;
 % surrogate information for significance testing
 numSurrogates = 20;
 surrogateMinLag = 20;
@@ -29,7 +30,7 @@ FromArea = [1,2,4];
 ToArea = [1,2,4];
 for p = 1:size(FromArea,2)
     for q = 1:size(ToArea,2)
-       toData = data(data(:,1) == Contrast & data(:,2) == Attention & data(:,3) == ToArea(q), :);
+        toData = data(data(:,1) == Contrast & data(:,2) == Attention & data(:,3) == ToArea(q), :);
         fromData = data(data(:,1) == Contrast & data(:,2) == Attention & data(:,3) == FromArea(p), :);
 
         % remove NaN values
@@ -48,6 +49,9 @@ for p = 1:size(FromArea,2)
             averageToData(e,:) = [Contrast, Attention, ToArea(q), e, mean(toData(toData(:,4) == e ,6:end))];
             averageFromData(e,:) = [Contrast, Attention, FromArea(p), e, mean(fromData(fromData(:,4) == e ,6:end))];
         end
+
+        % number of windows that should be evaluated
+        numWindows = floor(size(averageFromData, 2)/windowSize);
 
 
         % results matrix
@@ -82,16 +86,9 @@ for p = 1:size(FromArea,2)
                     % put data in format for analysis
                     X = [averageFromData(firstE,5:end)',averageToData(secondE,5:end)'];
 
-                    % size of a window
-                    windowSize = floor(size(X,1)/numWindows);
                     %select measurements in current trial with current window            
                     intervalStart = windowSize*(w-1)+1;
-                    if windowSize*w+1 > size(X,1)
-                        intervalEnd = windowSize*w;
-                    else
-                        intervalEnd = windowSize*w+1;
-                    end
-                        windowX = X(intervalStart:intervalEnd,:);          
+                    intervalEnd = windowSize*w+1;       
             
                     % left out a couple of results since the causality computation
                     % would error on these cases:
