@@ -24,8 +24,8 @@ disp(['Calculating Causalities from electrode E', num2str(fromChannel)]);
     for toChannel = 1 : numChannelsTo
         disp(['to Electode: ', num2str(toChannel)])
 
-        sampleFrom = datasample(1:60, numSurrogates, 'Replace', false);               
-        sampleTo = datasample(1:60, numSurrogates, 'Replace', false);
+        sampleFrom = datasample(1:numTrials, numSurrogates, 'Replace', false);               
+        sampleTo = datasample(1:numTrials, numSurrogates, 'Replace', false);
 
         for window = 1 : numWindows
             surrogateResults = zeros(1,numSurrogates);
