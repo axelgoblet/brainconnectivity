@@ -57,8 +57,8 @@ standardize = 'true'
 
 if strcmp(standardize, 'true')
     y = zscore(y')';
-    Xi = zscore(Xi')'
-    Z = zscore(Z')'
+    Xi = zscore(Xi')';
+    Z = zscore(Z')';
 end
 
 % compute unshifted causality

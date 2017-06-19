@@ -34,8 +34,8 @@ disp(['Calculating Causalities from electrode E', num2str(fromChannel)]);
             disp('Starting surrogate computation')
             for surr = 1 : numSurrogates
                 %disp(['surrogate: ', num2str(surr)])
-                surrFrom = squeeze(channelsFrom(sampleFrom(surr), fromChannel, :));  
-                surrTo = squeeze(channelsFrom(sampleTo(surr), toChannel, :));  
+                surrFrom = squeeze(channelsFrom(sampleFrom(surr), fromChannel, :))';  
+                surrTo = squeeze(channelsFrom(sampleTo(surr), toChannel, :))';  
 
                 %select measurements in current trial with current window            
                 intervalStart = windowStarts(window);
@@ -64,8 +64,8 @@ disp(['Calculating Causalities from electrode E', num2str(fromChannel)]);
             for trial = 1 : numTrials
                 %disp([' Current trial: ', num2str(trial)]);
 
-                driver = squeeze(channelsFrom(trial, fromChannel,:));
-                driven = squeeze(channelsTo(trial, toChannel,:));
+                driver = squeeze(channelsFrom(trial, fromChannel,:))';
+                driven = squeeze(channelsTo(trial, toChannel,:))';
 
                 %select measurements in current trial with current window             
                 intervalStart = windowStarts(window);
