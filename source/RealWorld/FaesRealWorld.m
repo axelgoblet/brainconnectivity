@@ -47,14 +47,14 @@ data = data(data(:,1) == Contrast & data(:,2) == Attention, 3:end);
 
 numTrials = max(data(:,3));
 
-%delete(gcp)
-%parpool(4);
+delete(gcp)
+parpool(2);
 
 for fromArea = 1 : size(FromArea,2)
     for toArea = 1 : size(ToArea,2)
         causalityResults = zeros(16,16,numWindows,numTrials,numTrials);
         significanceResults = zeros(16,16,numWindows,numTrials,numTrials);
-        for fromE = 1 : 16
+        parfor fromE = 1 : 16
         disp(['Calculating Causalities from electrode E', num2str(fromE) ,' in area V', num2str(FromArea(fromArea)), ' to area V', num2str(ToArea(toArea))]);
             for toE = 1 : 16
                 disp(['to Electode: ', num2str(toE)])
@@ -83,7 +83,7 @@ for fromArea = 1 : size(FromArea,2)
                             X = quantize(X, 10);
                             [causality, V, Vj, H_K, H_Kj, H_Kv] = gcausality(X, 1, 2, lag);
                             [significance, CCs, H_Ks] = caussignif(X, 1, 2, numSurrogates, surrogateMinLag, causality, H_Kj, lag);
-                            isSignificant = significance <= sigTheshold;
+                            isSignificant = significance <= sigThreshold;
                         end
                         causalityResults(fromE,toE,window,trial,trial) = causality;
                         significanceResults(fromE,toE,window,trial,trial) = isSignificant;
