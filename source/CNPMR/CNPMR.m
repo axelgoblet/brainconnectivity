@@ -16,7 +16,7 @@ function [causality, xR2, isSignificant, sensitivity] = CNPMR(y, Xi, Z, delay, e
 %   samplingFrequency is the sampling frequency of the data
 
 % band pass filter signal
-if nargin == 13
+if nargin == 12
    b = fir1(50, frequencyBand*2/samplingFrequency);
    y = filter(b,1,y);
    Xi = filter(b,1,Xi);
@@ -53,13 +53,12 @@ if isempty(ZTolerance) && not(isempty(Z))
     ZTolerance = ones(1,length(Z(:,1),1));
 end
 
-
-standardize = 'true';
+standardize = 'true'
 
 if strcmp(standardize, 'true')
     y = zscore(y')';
-    Xi = zscore(Xi')';
-    Z = zscore(Z')';
+    Xi = zscore(Xi')'
+    Z = zscore(Z')'
 end
 
 % compute unshifted causality
