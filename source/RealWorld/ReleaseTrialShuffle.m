@@ -2,7 +2,7 @@ function [ causalities, significances ] = ReleaseTrialShuffle( channelsFrom, cha
 %RELEASETRIALSHUFFLE Summary of this function goes here
 %   Detailed explanation goes here
 
-numWindows = size(windowStart,1);
+numWindows = size(windowStarts,1);
 numTrials = size(channelsFrom,1);
 numChannelsFrom = size(channelsFrom, 2);
 numChannelsTo = size(channelsTo, 2);
@@ -16,7 +16,7 @@ numSurrogates = 20;
 % maximum lag of model that we want to evaluate
 lag = 5;
 
-% Threshold for significance analysis
+%Trial Threshold for significance analysis
 sigThreshold = 0.05;
 
 for fromChannel = 1 : numChannelsFrom
