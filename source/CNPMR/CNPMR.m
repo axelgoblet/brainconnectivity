@@ -53,7 +53,7 @@ if isempty(ZTolerance) && not(isempty(Z))
     ZTolerance = ones(1,length(Z(:,1),1));
 end
 
-standardize = 'true'
+standardize = 'true';
 
 if strcmp(standardize, 'true')
     y = zscore(y')';
