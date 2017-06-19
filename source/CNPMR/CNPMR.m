@@ -11,11 +11,12 @@ function [causality, xR2, isSignificant, sensitivity] = CNPMR(y, Xi, Z, delay, e
 %   ZTolerance are the variances of the Gaussian kernel for variable Z
 %   includeSensitivity defines whether sensitivity should be computed (default true)
 %   significanceLevel is the level of significance desired (default 0.05)
+%   standardize is 'true' is you want to standardize the input data 'false' if you don't (default true)
 %   frequencyBand is the frequency band at which the signal is filtered before estimating the causality
 %   samplingFrequency is the sampling frequency of the data
 
 % band pass filter signal
-if nargin == 12
+if nargin == 13
    b = fir1(50, frequencyBand*2/samplingFrequency);
    y = filter(b,1,y);
    Xi = filter(b,1,Xi);
@@ -50,6 +51,15 @@ end
 if isempty(ZTolerance) && not(isempty(Z))
     
     ZTolerance = ones(1,length(Z(:,1),1));
+end
+
+
+standardize = 'true';
+
+if strcmp(standardize, 'true')
+    y = zscore(y')';
+    Xi = zscore(Xi')';
+    Z = zscore(Z')';
 end
 
 % compute unshifted causality
