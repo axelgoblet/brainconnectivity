@@ -31,7 +31,7 @@ for fromChannel = 1 : numChannelsFrom
             
             surrogateResults = zeros(1,numSurrogates);
 
-            disp(['Calculating Causalities from electrode', num2str(fromChannel), ' to electrode', num2str(toChannel) ,' || in Window: ', num2str(window)])
+            disp(['Calculating Causalities from channel ', num2str(fromChannel), ' to channel ', num2str(toChannel) ,' || in Window: ', num2str(window)])
             disp('Starting surrogate computation')
             for surr = 1 : numSurrogates
                 %disp(['surrogate: ', num2str(surr)])
