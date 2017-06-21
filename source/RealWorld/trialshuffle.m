@@ -13,7 +13,7 @@
 clear
 load('data\fullDataSet.mat');
 
-method = 'Faes';
+method = 'CNPMR';
 
 [r, c] = find(isnan(data) > 0);
 minIndex = min(c) - 1;
@@ -40,8 +40,8 @@ numWindows = floor(minIndex/windowSize);
 % Parameters for realworld data selection
 Contrast = 1;
 Attention = 1;
-FromArea = [1];
-ToArea = [1];
+FromArea = [1,4];
+ToArea = [1,4];
 
 data = data(data(:,1) == Contrast & data(:,2) == Attention, 3:end);
 
