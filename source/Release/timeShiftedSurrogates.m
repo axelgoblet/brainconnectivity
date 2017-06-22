@@ -26,8 +26,8 @@ for fromChannel = 1 : numChannelsFrom
 
         for window = 1 : numWindows
             if verbose
-                disp(['Calculating Causalities from channel ', num2str(fromChannel), ' to channel ', num2str(toChannel) ,' || in Window: ', num2str(window)])
-                disp('starting per trial computation')
+                disp(['Calculating Causalities from driver ', num2str(fromChannel), ' to driven ', num2str(toChannel) ,' || in Window: ', num2str(window)])
+                disp('starting per trial computation (Time Shifted Surrogates)')
             end
             
             % set window start and end indices            

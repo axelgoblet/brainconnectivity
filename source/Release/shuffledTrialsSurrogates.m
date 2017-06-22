@@ -39,8 +39,8 @@ for fromChannel = 1 : numChannelsFrom
             intervalEnd = windowStarts(window) + windowSize;
 
             if verbose
-                disp(['Calculating Causalities from channel ', num2str(fromChannel), ' to channel ', num2str(toChannel) ,' || in Window: ', num2str(window)])
-                disp('Starting surrogate computation')
+                disp(['Calculating Causalities from driver ', num2str(fromChannel), ' to driven ', num2str(toChannel) ,' || in Window: ', num2str(window)])
+                disp('Starting surrogate computation (Shuffled Trial Surrogates)')
             end
             
             % compute the surrogate causalities for the current window
