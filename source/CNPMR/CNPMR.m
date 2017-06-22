@@ -53,14 +53,6 @@ if isempty(ZTolerance) && not(isempty(Z))
     ZTolerance = ones(1,length(Z(:,1),1));
 end
 
-standardize = 'true';
-
-if strcmp(standardize, 'true')
-    y = zscore(y')';
-    Xi = zscore(Xi')';
-    Z = zscore(Z')';
-end
-
 % compute unshifted causality
 [causality, xR2, sensitivity] = estimateCausality(y, Xi, Z, delay, embeddingDimension, yTolerance, XiTolerance, ZTolerance, includeSensitivity);
 
