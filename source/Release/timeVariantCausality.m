@@ -1,9 +1,12 @@
-function [] = timeVariantCausality(timelock, fromChannels, toChannels, windowSize, stepSize, standardize, method)
+function [] = timeVariantCausality(timelock, fromChannels, toChannels, windowSize, stepSize, standardize, causalityMethod, significanceMethod)
     
-    % number of samples
+    
+    % init / fix parameters......
+
+    % find minimum number of samples
     [~,nanIndices] = find(isnan(squeeze(timelock.trial(:,1,:))));
     nsamples = min(nanIndices)-1;
-
+    
     % compute start points of windows
     windowStarts = timelock.time(1):stepSize:timelock.time(nsamples);
     
@@ -21,13 +24,17 @@ function [] = timeVariantCausality(timelock, fromChannels, toChannels, windowSiz
     % samples per window
     samplesPerWindow = round(windowSize / timestep);
     
-    % extract diver and driven vars
+    % extract diver and driven variables
     drivers = timelock.trial(:,fromChannels,1:nsamples);
     drivens = timelock.trial(:,toChannels,1:nsamples);
     
     % compute causalities
-    [causalities, significances] = ReleaseTrialShuffle(drivers, drivens, windowStartIndices, samplesPerWindow, standardize, method);
-    %[causalities, significances] = TrialBasedSurrogate(drivers, drivens, windowStartIndices, samplesPerWindow, standardize, method);
-    
+    if significanceMethod == 'shuffledTrialsSurrogates'
+        [causalities, significances] = shuffledTrialsSurrogates(drivers, drivens, windowStartIndices, samplesPerWindow, standardize, causalityMethod);
+    elseif significanceMethod == 'timeShiftedSurrogates'
+        [causalities, significances] = shuffledTrialsSurrogates(drivers, drivens, windowStartIndices, samplesPerWindow, standardize, causalityMethod);
+    end
+        
     % visualize causalities
+    
 end

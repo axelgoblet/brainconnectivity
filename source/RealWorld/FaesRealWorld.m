@@ -13,7 +13,7 @@
 clear
 load('data\fullDataSet.mat');
 
-method = 'Faes';
+method = 'CNPMR';
 
 [r, c] = find(isnan(data) > 0);
 minIndex = min(c) - 1;
@@ -63,7 +63,7 @@ for fromArea = 1 : size(FromArea,2)
                     
                     disp('starting computation per trial')
                     for trial = 1 : numTrials
-                        disp([' Current trial: ', num2str(trial)]);
+                        %disp([' Current trial: ', num2str(trial)]);
                             
                         driver = data(data(:,1) == fromArea & data(:,2) == fromE & data(:,3) == trial, 4:end);
                         driven = data(data(:,1) == toArea & data(:,2) == toE & data(:,3) == trial, 4:end);

@@ -1,4 +1,4 @@
-function [ causalities, significances ] = TrialBasedSurrogate( channelsFrom, channelsTo, windowStarts, windowSize, standardize, method )
+function [ causalities, significances ] = timeShiftedSurrogates( channelsFrom, channelsTo, windowStarts, windowSize, standardize, method )
 %TRIALBASEDSURROGATE Summary of this function goes here
 %   Detailed explanation goes here
 

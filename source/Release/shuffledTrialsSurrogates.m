@@ -1,4 +1,4 @@
-function [ causalities, significances ] = ReleaseTrialShuffle( channelsFrom, channelsTo, windowStarts, windowSize, standardize, method )
+function [ causalities, significances ] = shuffledTrialsSurrogates( channelsFrom, channelsTo, windowStarts, windowSize, standardize, method )
 %RELEASETRIALSHUFFLE Summary of this function goes here
 %   Detailed explanation goes here
 
