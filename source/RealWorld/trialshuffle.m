@@ -13,7 +13,7 @@
 clear
 load('data\fullDataSet.mat');
 
-method = 'CNPMR';
+method = 'Faes';
 
 [r, c] = find(isnan(data) > 0);
 minIndex = min(c) - 1;
