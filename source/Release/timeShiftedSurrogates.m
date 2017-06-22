@@ -26,7 +26,7 @@ for fromChannel = 1 : numChannelsFrom
 
         for window = 1 : numWindows
             if verbose
-                disp(['Calculating Causalities from channel ', num2str(channelsFrom(fromChannel)), ' to channel ', num2str(channelsTo(toChannel)) ,' || in Window: ', num2str(window)])
+                disp(['Calculating Causalities from channel ', num2str(fromChannel), ' to channel ', num2str(toChannel) ,' || in Window: ', num2str(window)])
                 disp('starting per trial computation')
             end
             
@@ -37,8 +37,8 @@ for fromChannel = 1 : numChannelsFrom
             % start of per trial computation for current window
             for trial = 1 : numTrials
 
-                driver = squeeze(channelsFrom(trial, channelsFrom(fromChannel),:))';
-                driven = squeeze(channelsTo(trial, channelsTo(toChannel),:))';
+                driver = squeeze(channelsFrom(trial, fromChannel,:))';
+                driven = squeeze(channelsTo(trial, toChannel,:))';
 
                 driver = driver(intervalStart:intervalEnd);
                 driven = driven(intervalStart:intervalEnd);

@@ -39,15 +39,15 @@ for fromChannel = 1 : numChannelsFrom
             intervalEnd = windowStarts(window) + windowSize;
 
             if verbose
-                disp(['Calculating Causalities from channel ', num2str(channelsFrom(fromChannel)), ' to channel ', num2str(channelsTo(toChannel)) ,' || in Window: ', num2str(window)])
+                disp(['Calculating Causalities from channel ', num2str(fromChannel), ' to channel ', num2str(toChannel) ,' || in Window: ', num2str(window)])
                 disp('Starting surrogate computation')
             end
             
             % compute the surrogate causalities for the current window
             for surr = 1 : numSurrogates
                 % take surrogate data from input
-                surrFrom = squeeze(channelsFrom(sampleFrom(surr), channelsFrom(fromChannel), :))';  
-                surrTo = squeeze(channelsFrom(sampleTo(surr), channelsTo(toChannel), :))';  
+                surrFrom = squeeze(channelsFrom(sampleFrom(surr), fromChannel, :))';  
+                surrTo = squeeze(channelsFrom(sampleTo(surr), toChannel, :))';  
                 
                 surrFrom = surrFrom(intervalStart:intervalEnd);
                 surrTo = surrTo(intervalStart:intervalEnd);
@@ -77,8 +77,8 @@ for fromChannel = 1 : numChannelsFrom
             % start of per trial computation for current window
             for trial = 1 : numTrials
 
-                driver = squeeze(channelsFrom(trial, channelsFrom(fromChannel),:))';
-                driven = squeeze(channelsTo(trial, channelsTo(toChannel),:))';
+                driver = squeeze(channelsFrom(trial, fromChannel,:))';
+                driven = squeeze(channelsTo(trial, toChannel,:))';
 
                 driver = driver(intervalStart:intervalEnd);
                 driven = driven(intervalStart:intervalEnd);
