@@ -1,25 +1,25 @@
 
 function heatmaptest 
 
-causality = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\CNPMRcausalityResultsV1toV1.mat');
+causality = load('..\..\..\output\trialshuffle\CNPMRcausalityResultsV1toV1.mat');
 causality11 = causality.data;
-significance = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\CNPMRsignificanceResultsV1toV1.mat');
+significance = load('..\..\..\output\trialshuffle\CNPMRsignificanceResultsV1toV1.mat');
 significance11 = significance.data;
-causality = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\CNPMRcausalityResultsV1toV4.mat')
+causality = load('..\..\..\output\trialshuffle\CNPMRcausalityResultsV1toV4.mat')
 causality12 = causality.data;
-significance = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\CNPMRsignificanceResultsV1toV4.mat');
+significance = load('..\..\..\output\trialshuffle\CNPMRsignificanceResultsV1toV4.mat');
 significance12 = significance.data;
-causality = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\CNPMRcausalityResultsV4toV1.mat')
+causality = load('..\..\..\output\trialshuffle\CNPMRcausalityResultsV4toV1.mat')
 causality111 = causality.data;
-significance = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\CNPMRsignificanceResultsV4toV1.mat');
+significance = load('..\..\..\output\trialshuffle\CNPMRsignificanceResultsV4toV1.mat');
 significance111 = significance.data;
-causality = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\CNPMRcausalityResultsV4toV4.mat')
+causality = load('..\..\..\output\trialshuffle\CNPMRcausalityResultsV4toV4.mat')
 causality1111 = causality.data;
-significance = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\CNPMRsignificanceResultsV4toV4.mat');
+significance = load('..\..\..\output\trialshuffle\CNPMRsignificanceResultsV4toV4.mat');
 significance1111 = significance.data;
 
 V1 = load('averageV1.mat');
-V4 = load('averageV4.mat');
+%V4 = load('averageV4.mat');
 
 f = figure('Visible','off', 'units','normalized','outerposition',[0 0.05 1 0.95]);
 
@@ -35,8 +35,8 @@ C = significance111 .* (causality111 > 0);
 C = squeeze(sum(C,4));
 C = squeeze(mean(C,4));
 D = significance1111 .* (causality1111 > 0);
-D = squeeze(sum(C,4));
-D = squeeze(mean(C,4));
+D = squeeze(sum(D,4));
+D = squeeze(mean(D,4));
 
 % normalize for heatmap
 maxcol = 1;
@@ -56,7 +56,7 @@ end
 
 t = 10;
 
-pan = uipanel('Parent', f, 'Units', 'normal', 'Position', [0 0 1/3 1/2], 'BorderWidth', 0);
+pan = uipanel('Parent', f, 'Units', 'normal', 'Position', [0 0 1/3 1/2], 'BorderWidth', 0, 'BackgroundColor', 'white');
 sld = uicontrol('Style', 'slider',...
     'Min',1,'Max',13,'Value',t,...
     'Units', 'normal', 'Position', [1/3 15/16 2/3 1/16],...
