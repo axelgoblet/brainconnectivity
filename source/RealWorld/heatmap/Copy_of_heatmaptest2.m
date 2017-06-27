@@ -1,21 +1,21 @@
 
 function heatmaptest 
 
-causality = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\CNPMRcausalityResultsV1toV1.mat');
+causality = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\FaescausalityResultsV1toV1.mat');
 causality11 = causality.data;
-significance = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\CNPMRsignificanceResultsV1toV1.mat');
+significance = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\FaessignificanceResultsV1toV1.mat');
 significance11 = significance.data;
-causality = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\CNPMRcausalityResultsV1toV4.mat')
+causality = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\FaescausalityResultsV1toV4.mat')
 causality12 = causality.data;
-significance = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\CNPMRsignificanceResultsV1toV4.mat');
+significance = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\FaessignificanceResultsV1toV4.mat');
 significance12 = significance.data;
-causality = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\CNPMRcausalityResultsV4toV1.mat')
+causality = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\FaescausalityResultsV4toV1.mat')
 causality111 = causality.data;
-significance = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\CNPMRsignificanceResultsV4toV1.mat');
+significance = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\FaessignificanceResultsV4toV1.mat');
 significance111 = significance.data;
-causality = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\CNPMRcausalityResultsV4toV4.mat')
+causality = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\FaescausalityResultsV4toV4.mat')
 causality1111 = causality.data;
-significance = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\CNPMRsignificanceResultsV4toV4.mat');
+significance = load('C:\Users\dbn\Desktop\brainconnectivity\output\trialshuffle\FaessignificanceResultsV4toV4.mat');
 significance1111 = significance.data;
 
 V1 = load('averageV1.mat');
@@ -72,7 +72,7 @@ slidercallback(sld);
 
 function slidercallback(source,event)    
     t = round(source.Value);
-     subplot(2,3,1);
+    subplot(2,3,1);
     SS=V1
     S = SS.averageToData
     plot(S')
@@ -90,7 +90,7 @@ function slidercallback(source,event)
     set(gca,'XTick',[1:16]);
     set(gca,'YTick',[1:16]);
     colorbar;
-    title(['C_{npmr} from V_1 to V_1, time/window ' num2str(t) ]);
+    title(['Faes from V_1 to V_1, time/window ' num2str(t) ]);
     
     subplot(2,3,3);    
     colormap('jet');
@@ -99,7 +99,7 @@ function slidercallback(source,event)
     set(gca,'XTick',[1:16]);
     set(gca,'YTick',[1:16]);
     colorbar;
-    title(['C_{npmr} from V_1 to V_4, time/window ' num2str(t) ]);
+    title(['Faes from V_1 to V_4, time/window ' num2str(t) ]);
     
     subplot(2,3,5);    
     colormap('jet');
@@ -108,7 +108,7 @@ function slidercallback(source,event)
     set(gca,'XTick',[1:16]);
     set(gca,'YTick',[1:16]);
     colorbar;
-    title(['C_{npmr} from V_4 to V_1, time/window ' num2str(t) ]);
+    title(['Faes from V_4 to V_1, time/window ' num2str(t) ]);
    
     subplot(2,3,6);    
     colormap('jet');
@@ -117,7 +117,7 @@ function slidercallback(source,event)
     set(gca,'XTick',[1:16]);
     set(gca,'YTick',[1:16]);
     colorbar;
-    title(['C_{npmr} from V_4 to V_4, time/window ' num2str(t) ]);
+    title(['Faes from V_4 to V_4, time/window ' num2str(t) ]);
 end
 
 end 
